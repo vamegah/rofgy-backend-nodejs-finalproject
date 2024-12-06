@@ -10,7 +10,10 @@ const SECRET_KEY = 'your_secret_key';
 
 mongoose.set('strictQuery', false);
 
-const uri =  "mongodb://root:VsMFpF3gP6Xb19GuKym1YshK@172.21.137.39:27017";
+//const uri =  "mongodb://root:LNVgzj6FVdqF2CyHthkdxEa3@172.21.210.31:27017";
+//mongoose.connect(uri,{'dbName':'SocialDB'});
+
+const uri =  "mongodb://mongodb:27017";
 mongoose.connect(uri,{'dbName':'SocialDB'});
 
 
@@ -69,7 +72,8 @@ app.post('/register', async (req, res) => {
     const token = jwt.sign({ userId: newUser._id, username: newUser.username }, SECRET_KEY, { expiresIn: '1h' });
     req.session.token = token;
 
-    res.send({"message":`The user ${username}has been added`});
+   // res.send({"message":`The user ${username}has been added`});
+    res.redirect(`/index?username=${newUser.username}`);
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: 'Internal Server Error' });
@@ -87,7 +91,8 @@ app.post('/login', async (req, res) => {
     const token = jwt.sign({ userId: user._id, username: user.username }, SECRET_KEY, { expiresIn: '1h' });
     req.session.token = token;
 
-    res.redirect({"mesage":`${user.username} has logged in`});
+    //res.redirect({"mesage":`${user.username} has logged in`});
+    res.redirect(`/index?username=${user.username}`);
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: 'Internal Server Error' });
